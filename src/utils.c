@@ -71,7 +71,7 @@ char *ft_joinpath(char *path, char *name)
 
 int cmp_alpha(char *a, char *b)
 {
-    return strcmp(a, b);
+    return ft_strcmp(a, b);
 }
 
 int cmp_time(char *a, char *b, char *path)
@@ -87,7 +87,7 @@ int cmp_time(char *a, char *b, char *path)
     free(p2);
 
     if (st1.st_mtime == st2.st_mtime)
-        return strcmp(a, b);
+        return ft_strcmp(a, b);
 
     return (st2.st_mtime - st1.st_mtime);
 }
