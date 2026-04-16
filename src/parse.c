@@ -115,10 +115,21 @@ void list_dir(char *path, t_opts *opts, t_ls *ls)
     char **entries;
     int min_dirs;
 
+    struct stat st;
+    if (stat(path, &st) == -1)
+    {
+        perror(path);
+        return;
+    }
+    if (!S_ISDIR(st.st_mode)) // fichier → pas opendir
+    {
+        printf("%s\n", path);
+        return;
+    }
     entries = read_dir(path, &min_dirs);
     if (!entries)
     {
-        // printf("%s \n", path); 
+        // printf("ft_ls: %s: no such file or directory\n", path); 
         return;
     }
     sort(entries, opts, path);
