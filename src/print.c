@@ -12,12 +12,19 @@
 
 #include "ft_ls.h"
 
-void print_files(char **entries)
+void print_files(char **entries, t_ls *ls)
 {
     int i = 0;
     
     while (entries && entries[i])
     {
+        if (entries[i][0] == '.' && 
+            !ls->options.a)
+        {
+            // fichier caché
+            i++;
+            continue;
+        }
         printf("%s\t", entries[i]);
         i++;
     }

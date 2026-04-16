@@ -26,6 +26,7 @@ typedef struct s_opts {
 // ls whole struct
 typedef struct s_ls {
     char    **paths;
+    int     path_len;
 
     // files/dirs
     char    **files;
@@ -35,7 +36,7 @@ typedef struct s_ls {
 
 // parse
 int parse_args(int argc, char **argv, t_ls *ls);
-void list_dir(char *path, t_opts *opts);
+void list_dir(char *path, t_opts *opts, t_ls *ls);
 
 // utils
 int ft_strcmp(const char *s1, const char *s2);
@@ -44,8 +45,7 @@ char	*ft_strjoin(char const *s1, char const *s2);
 int cmp_alpha(char *a, char *b);
 int cmp_time(char *a, char *b, char *path);
 // print
-void print_files(char **entries);
-
+void print_files(char **entries, t_ls *ls);
 
 
 

@@ -14,7 +14,7 @@ NAME        = ft_ls
 CC = cc
 CFLAGS = -Wall -Wextra #-Werror 
 # sanitize
-CFLAGS += #-fsanitize=address #-fsanitize=undefined
+CFLAGS += -fsanitize=address #-fsanitize=undefined
 
 SRC_DIR = src
 INC_DIR     = includes

@@ -11,24 +11,34 @@
 /* ************************************************************************** */
 #include "ft_ls.h"
 
+static inline int init_ls(t_ls *ls)
+{
+    ls->options.l = 0;
+    ls->options.R = 0;
+    ls->options.a = 0;
+    ls->options.r = 0;
+    ls->options.t = 0;
+	return 0;
+}
+
 int main(int argc, char **argv)
 {
 	t_ls *ls;
 
 	ls = (t_ls *) malloc(sizeof(t_ls));
-	if(!ls || !parse_args(argc, argv, ls))
+	if(!ls || init_ls(ls) || !parse_args(argc, argv, ls))
 	{
 		return (1);
 	}
 	if (!ls->paths || !ls->paths[0])
 	{
-		list_dir(".", &ls->options);
+		list_dir(".", &ls->options, ls);
 	}
 	else
 	{
 		int i = 0;
 		while (ls->paths[i])
-			list_dir(ls->paths[i++], &ls->options);
+			list_dir(ls->paths[i++], &ls->options, ls);
 	}
 	// test debug
     // printf("options: l=%d R=%d a=%d r=%d t=%d\n",
