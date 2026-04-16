@@ -12,10 +12,9 @@
 
 NAME        = ft_ls
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
-
-LIBFT_DIR = libft
-LIBFT = $(LIBFT_DIR)/libft.a
+CFLAGS = -Wall -Wextra #-Werror 
+# sanitize
+CFLAGS += #-fsanitize=address #-fsanitize=undefined
 
 SRC_DIR = src
 INC_DIR     = includes
@@ -25,28 +24,24 @@ SRCS = $(addprefix $(SRC_DIR)/, \
 )
 OBJS = $(SRCS:.c=.o)
 
-INCLUDES    = -I$(INC_DIR) -I$(LIBFT_DIR)
+INCLUDES    = -I$(INC_DIR)
 
 
 # **************************************************************************** #
 
 all: $(NAME)
 
-$(NAME): $(LIBFT) $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
-$(LIBFT):
-	$(MAKE) -C $(LIBFT_DIR)
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
-	$(MAKE) clean -C $(LIBFT_DIR)
 	rm -f $(OBJS)
 
 fclean: clean
-	$(MAKE) fclean -C $(LIBFT_DIR)
 	rm -f $(NAME)
 
 re: fclean all
