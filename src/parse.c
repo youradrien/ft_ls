@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 #include "ft_ls.h"
 
+
+
 static void sort(char **entries, t_opts *opts, char *path)
 {
     int i, j;
@@ -37,6 +39,8 @@ static void sort(char **entries, t_opts *opts, char *path)
         }
     }
 }
+
+
 
 static char **read_dir(char *path, int *minimum_dirs)
 {
@@ -76,6 +80,8 @@ static char **read_dir(char *path, int *minimum_dirs)
     return entries;
 }
 
+
+
 static char **extract_dirs(char **entries, int minimum_dirs, char *path)
 {
     struct stat st;
@@ -101,6 +107,8 @@ static char **extract_dirs(char **entries, int minimum_dirs, char *path)
     dirs[j] = NULL;
     return dirs;
 }
+
+
 
 void list_dir(char *path, t_opts *opts)
 {
@@ -131,6 +139,7 @@ void list_dir(char *path, t_opts *opts)
 
 
 
+
 static int parse_flags(char *arg, t_opts *opts)
 {
     int i = 1;
@@ -152,6 +161,9 @@ static int parse_flags(char *arg, t_opts *opts)
     }
     return (0);
 }
+
+
+
 
 int parse_args(int argc, char **argv, t_ls *ls)
 {
