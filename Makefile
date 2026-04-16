@@ -21,6 +21,8 @@ INC_DIR     = includes
 SRCS = $(addprefix $(SRC_DIR)/, \
 	main.c \
 	utils.c \
+	parse.c \
+	print.c \
 )
 OBJS = $(SRCS:.c=.o)
 
