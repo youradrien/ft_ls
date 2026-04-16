@@ -38,10 +38,11 @@ int parse_args(int argc, char **argv, t_ls *ls);
 void list_dir(char *path, t_opts *opts);
 
 // utils
-int	ft_strcmp(const char *s1, const char *s2);
-char *ft_joinpath(char *path, char *name);
+int ft_strcmp(const char *s1, const char *s2);
+char    *ft_joinpath(char *path, char *name);
 char	*ft_strjoin(char const *s1, char const *s2);
-
+int cmp_alpha(char *a, char *b);
+int cmp_time(char *a, char *b, char *path);
 // print
 void print_files(char **entries);
 

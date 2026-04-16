@@ -11,42 +11,70 @@
 /* ************************************************************************** */
 #include "ft_ls.h"
 
+static void sort(char **entries, t_opts *opts, char *path)
+{
+    int i, j;
+    char *tmp;
 
-    static char **read_dir(char *path, int *minimum_dirs)
+    for (i = 0; entries[i]; i++)
     {
-        DIR *dir;
-
-        dir = opendir(path);
-        if (!dir)
-            return NULL;
-
-        // 1. count
-        struct dirent *entry;
-        int count = 0;
-        while ((entry = readdir(dir)))
-            count++;
-
-        *minimum_dirs = (count);
-        closedir(dir);
-
-        // 2. fill
-        dir = opendir(path);
-        int i = 0;
-
-        char **entries = (char **) malloc(sizeof(char *) * (count + 1));
-        while ((entry = readdir(dir)))
+        for (j = i + 1; entries[j]; j++)
         {
-            if (ft_strcmp(entry->d_name, ".") == 0
-            || ft_strcmp(entry->d_name, "..") == 0)
-                continue;
+            int cmp;
+            if (opts->t)
+                cmp = cmp_time(entries[i], entries[j], path);
+            else
+                cmp = strcmp(entries[i], entries[j]);
 
-            entries[i++] = strdup(entry->d_name);
+            if (opts->r)
+                cmp = -cmp;
+            if (cmp > 0)
+            {
+                tmp = entries[i];
+                entries[i] = entries[j];
+                entries[j] = tmp;
+            }
         }
-
-        entries[i] = NULL;
-        closedir(dir);
-        return entries;
     }
+}
+
+static char **read_dir(char *path, int *minimum_dirs)
+{
+    DIR *dir;
+
+    dir = opendir(path);
+    if (!dir)
+        return NULL;
+
+    // 1. count
+    struct dirent *entry;
+    int count = 0;
+    while ((entry = readdir(dir)))
+        count++;
+
+    *minimum_dirs = (count);
+    closedir(dir);
+
+    // 2. fill
+    dir = opendir(path);
+    int i = 0;
+
+    char **entries = (char **) malloc(sizeof(char *) * (count + 1));
+    while ((entry = readdir(dir)))
+    {
+        if (ft_strcmp(entry->d_name, ".") == 0
+        || ft_strcmp(entry->d_name, "..") == 0)
+            continue;
+
+        // /printf("entry[%d]: %s \n", i, entry->d_name);
+        
+        entries[i++] = strdup(entry->d_name);
+    }
+
+    entries[i] = NULL;
+    closedir(dir);
+    return entries;
+}
 
 static char **extract_dirs(char **entries, int minimum_dirs, char *path)
 {
@@ -80,7 +108,7 @@ void list_dir(char *path, t_opts *opts)
     int min_dirs;
 
     entries = read_dir(path, &min_dirs);
-    // sort(entries, opts);
+    sort(entries, opts, path);
 
     print_files(entries);
 

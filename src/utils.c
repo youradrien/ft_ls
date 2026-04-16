@@ -67,3 +67,27 @@ char *ft_joinpath(char *path, char *name)
     free(tmp);
     return res;
 }
+
+
+int cmp_alpha(char *a, char *b)
+{
+    return strcmp(a, b);
+}
+
+int cmp_time(char *a, char *b, char *path)
+{
+    struct stat st1, st2;
+    char *p1 = ft_joinpath(path, a);
+    char *p2 = ft_joinpath(path, b);
+
+    stat(p1, &st1);
+    stat(p2, &st2);
+
+    free(p1);
+    free(p2);
+
+    if (st1.st_mtime == st2.st_mtime)
+        return strcmp(a, b);
+
+    return (st2.st_mtime - st1.st_mtime);
+}
