@@ -21,6 +21,6 @@ void print_files(char **entries)
         printf("%s\t", entries[i]);
         i++;
     }
-    printf("\n");
+    printf("\n\n");
 }
 

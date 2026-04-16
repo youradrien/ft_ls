@@ -35,6 +35,7 @@ typedef struct s_ls {
 
 // parse
 int parse_args(int argc, char **argv, t_ls *ls);
+void list_dir(char *path, t_opts *opts);
 
 // utils
 int	ft_strcmp(const char *s1, const char *s2);

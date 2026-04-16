@@ -20,6 +20,12 @@ int main(int argc, char **argv)
 	{
 		return (1);
 	}
+	int c = 0;
+    while(ls->paths[c])
+	{
+        list_dir(ls->paths[c], &(ls->options));
+        c++;
+    }
 	// test debug
     // printf("options: l=%d R=%d a=%d r=%d t=%d\n",
     //     ls->options.l,

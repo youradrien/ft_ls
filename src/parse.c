@@ -48,7 +48,7 @@
         return entries;
     }
 
-static char **extract_dirs(char **entries, int minimum_dirs)
+static char **extract_dirs(char **entries, int minimum_dirs, char *path)
 {
     struct stat st;
     char    **dirs;
@@ -63,8 +63,10 @@ static char **extract_dirs(char **entries, int minimum_dirs)
     i = 0;
     while (entries[i])
     {
-        if (stat(entries[i], &st) == 0 && S_ISDIR(st.st_mode))
+        char *a = ft_joinpath(path, entries[i]);
+        if (stat(a, &st) == 0 && S_ISDIR(st.st_mode))
             dirs[j++] = entries[i];
+        free(a);
         i++;
     }
 
@@ -84,18 +86,17 @@ void list_dir(char *path, t_opts *opts)
 
     if (opts->R)
     {
-        printf("-R oof \n");
-        char **dirs = extract_dirs(entries, min_dirs);
+        char **dirs = extract_dirs(entries, min_dirs, path);
         // for each dir:
         int i = 0;
         while(dirs[i])
         {
-            printf("dirs[%d] = %s \n",i, dirs[i]);
             char *full = ft_joinpath(path, dirs[i]);
+            printf("%s: \n", full);
+
             list_dir(full, opts);
             free(full);
             i++;
-            return;
         }
     }
 }
@@ -155,11 +156,5 @@ int parse_args(int argc, char **argv, t_ls *ls)
         i++;
     }
     ls->paths[c] = NULL;
-    c = 0;
-    while(ls->paths[c]){
-        list_dir(ls->paths[c], &(ls->options));
-        c++;
-    }
-	// split_files_dirs(ls, c);
     return (1);
 }
