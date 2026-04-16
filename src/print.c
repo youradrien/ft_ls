@@ -12,43 +12,15 @@
 
 #include "ft_ls.h"
 
-void print_files(t_ls *ls)
+void print_files(char **entries)
 {
     int i = 0;
-
-    while (ls->files && ls->files[i])
+    
+    while (entries && entries[i])
     {
-        printf("%s\n", ls->files[i]);
+        printf("%s\t", entries[i]);
         i++;
     }
-}
-
-void print_dir_content(char *path)
-{
-    DIR *dir = opendir(path);
-    struct dirent *entry;
-
-    if (!dir)
-        return;
-    while ((entry = readdir(dir)))
-    {
-        if (entry->d_name[0] == '.')
-            continue;
-        printf("%s\t", entry->d_name);
-    }
-    closedir(dir);
-}
-
-void print_dirs(t_ls *ls)
-{
-    int i = 0;
-
-    while (ls->dirs && ls->dirs[i])
-    {
-        printf("\n%s:\n", ls->dirs[i]);
-        print_dir_content(ls->dirs[i]); // sans récursion globale
-        printf("\n");
-        i++;
-    }
+    printf("\n");
 }
 

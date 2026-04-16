@@ -21,19 +21,17 @@ int main(int argc, char **argv)
 		return (1);
 	}
 	// test debug
-    printf("options: l=%d R=%d a=%d r=%d t=%d\n",
-        ls->options.l,
-        ls->options.R,
-        ls->options.a,
-        ls->options.r,
-        ls->options.t);
-	int i = 0;
-    while (ls->paths[i])
-    {
-        printf("path: %s\n", ls->paths[i]);
-        i++;
-    }
-	print_dirs(ls);
-	print_files(ls);
+    // printf("options: l=%d R=%d a=%d r=%d t=%d\n",
+    //     ls->options.l,
+    //     ls->options.R,
+    //     ls->options.a,
+    //     ls->options.r,
+    //     ls->options.t);
+	// int i = 0;
+    // while (ls->paths[i])
+    // {
+    //     printf("path: %s\n", ls->paths[i]);
+    //     i++;
+    // }
 	return (0);
 }
