@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 #include "ft_ls.h"
 
+
 static int parse_flags(char *arg, t_opts *opts)
 {
     int i = 1;
@@ -32,7 +33,6 @@ static int parse_flags(char *arg, t_opts *opts)
     }
     return (0);
 }
-
 
 
 

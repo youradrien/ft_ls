@@ -12,7 +12,60 @@
 
 #include "ft_ls.h"
 
-void print_files(char **entries, t_ls *ls)
+static void print_perms(mode_t mode)
+{
+    printf("%c", (mode & S_IRUSR) ? 'r' : '-');
+    printf("%c", (mode & S_IWUSR) ? 'w' : '-');
+    printf("%c", (mode & S_IXUSR) ? 'x' : '-');
+
+    printf("%c", (mode & S_IRGRP) ? 'r' : '-');
+    printf("%c", (mode & S_IWGRP) ? 'w' : '-');
+    printf("%c", (mode & S_IXGRP) ? 'x' : '-');
+
+    printf("%c", (mode & S_IROTH) ? 'r' : '-');
+    printf("%c", (mode & S_IWOTH) ? 'w' : '-');
+    printf("%c", (mode & S_IXOTH) ? 'x' : '-');
+}
+
+
+static void print_L(char *path, char *name)
+{
+    struct stat st;
+    char *full = ft_joinpath(path, name);
+
+    if (stat(full, &st) == -1)
+    {
+        free(full);
+        return;
+    }
+
+    // type
+    printf("%c", S_ISDIR(st.st_mode) ? 'd' : '-');
+    // perms
+    print_perms(st.st_mode);
+    // links
+    printf(" %lu", (unsigned long)st.st_nlink);
+
+    // owner / group
+    struct passwd *pw = getpwuid(st.st_uid);
+    struct group *gr = getgrgid(st.st_gid);
+    printf(" %s %s", pw->pw_name, gr->gr_name);
+
+    // size
+    printf(" %lld", st.st_size);
+
+    // time
+    char *t = ctime(&st.st_mtime);
+    printf(" %.12s", t + 4);
+
+    // name
+    printf(" %s\n", name);
+
+    free(full);
+}
+
+
+void print_files(char **entries, t_ls *ls, char *path)
 {
     int i = 0;
     
@@ -25,7 +78,10 @@ void print_files(char **entries, t_ls *ls)
             i++;
             continue;
         }
-        printf("%s\t", entries[i]);
+        if (ls->options.l)
+            print_L(path, entries[i]);
+        else
+            printf("%s\t", entries[i]);
         i++;
     }
     printf("\n\n");

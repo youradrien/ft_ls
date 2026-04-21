@@ -66,7 +66,8 @@ static char **read_dir(char *path, int *minimum_dirs, t_opts *opts)
     while ((entry = readdir(dir)))
     {
         if ((!opts->a) && (ft_strcmp(entry->d_name, ".") == 0
-        || ft_strcmp(entry->d_name, "..") == 0))
+            || ft_strcmp(entry->d_name, "..") == 0)
+        )
             continue;
 
         // printf("entry[%d]: %s \n", i, entry->d_name);   
@@ -132,23 +133,19 @@ void list_dir(char *path, t_opts *opts, t_ls *ls)
         return;
     entries = read_dir(path, &min_dirs, opts);
     if (!entries)
-    {
-        // printf("ft_ls: %s: no such file or directory\n", path); 
         return;
-    }
+    
     sort(entries, opts, path);
 
     char **dirs = extract_dirs(entries, min_dirs, path);
     if(!opts->R && ls->path_len > 1)
-    {
-        //char *full = ft_joinpath(path, dirs[0]);
         printf("%s: \n", path);
-    }
-    print_files(entries, ls);
+        
+    print_files(entries, ls, path);
 
     if (opts->R)
     {
-        // for each dir:
+        // for-each dir
         int i = 0;
         while(dirs[i])
         {

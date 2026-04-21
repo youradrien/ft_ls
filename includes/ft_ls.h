@@ -12,6 +12,8 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <stdlib.h>
+#include <pwd.h>
+#include <grp.h>
 
 // ls -options flags
 typedef struct s_opts {
@@ -45,8 +47,7 @@ char	*ft_strjoin(char const *s1, char const *s2);
 int cmp_alpha(char *a, char *b);
 int cmp_time(char *a, char *b, char *path);
 // print
-void print_files(char **entries, t_ls *ls);
-
+void print_files(char **entries, t_ls *ls, char *path);
 
 
 #endif
