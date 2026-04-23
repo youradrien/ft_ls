@@ -76,7 +76,6 @@ static void sort_paths(t_ls *ls)
             for (j = i + 1; arr[j]; j++)
             {
                 int cmp = strcmp(arr[i], arr[j]);
-
                 if (ls->options.r)
                     cmp = -cmp;
                 if (cmp > 0)
@@ -93,19 +92,19 @@ static void sort_paths(t_ls *ls)
     {
         char * **z[2] = {&(_files), &(_dirs)};
         char **arr = *z[k];
-        printf("%s: \n", k == 0 ? "files" : "dirs");
+        // printf("%s: \n", k == 0 ? "files" : "dirs");
         int i = 0;
         while(arr[i]){
-            printf("- %s\n", arr[i]);
+            // printf("- %s\n", arr[i]);
             ls->paths[a] = arr[i];
             i++;
             a++;
         }
     }
-    printf("ls->paths\n");
+    // printf("ls->paths\n");
     for(int i = 0; i <= ls->path_len; i++)
     {
-        printf("- %s\n", ls->paths[i]);
+        // printf("- %s\n", ls->paths[i]);
     }
 }
 
