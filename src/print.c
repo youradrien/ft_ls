@@ -50,14 +50,11 @@ static void print_L(char *path, char *name)
     struct passwd *pw = getpwuid(st.st_uid);
     struct group *gr = getgrgid(st.st_gid);
     printf(" %s %s", pw->pw_name, gr->gr_name);
-
     // size
     printf(" %lld", st.st_size);
-
     // time
     char *t = ctime(&st.st_mtime);
     printf(" %.12s", t + 4);
-
     // name
     printf(" %s\n", name);
 

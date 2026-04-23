@@ -138,7 +138,8 @@ void list_dir(char *path, t_opts *opts, t_ls *ls)
     sort(entries, opts, path);
 
     char **dirs = extract_dirs(entries, min_dirs, path);
-    if(!opts->R && ls->path_len > 1)
+    if( (!opts->R && ls->path_len > 1)
+        || (opts->R))
         printf("%s: \n", path);
         
     print_files(entries, ls, path);
@@ -150,7 +151,7 @@ void list_dir(char *path, t_opts *opts, t_ls *ls)
         while(dirs[i])
         {
             char *full = ft_joinpath(path, dirs[i]);
-            printf("%s: \n", full);
+            // printf("%s: \n", full);
 
             if( (opts->a && dirs[i][0] == '.') || dirs[i][0] != '.')
             {
