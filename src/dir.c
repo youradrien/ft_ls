@@ -113,7 +113,7 @@ static  int is_a_file(char *path)
     struct stat st;
     if (stat(path, &st) == -1)
     {
-        perror(path);
+        // perror(path);
         return 1;
     }
     if (!S_ISDIR(st.st_mode)) // fichier → pas opendir
@@ -150,9 +150,11 @@ void list_dir(char *path, t_opts *opts, t_ls *ls)
         int i = 0;
         while(dirs[i])
         {
+            if (strcmp(dirs[i], ".") == 0 || strcmp(dirs[i], "..") == 0){
+                i++;
+                continue;
+            }
             char *full = ft_joinpath(path, dirs[i]);
-            // printf("%s: \n", full);
-
             if( (opts->a && dirs[i][0] == '.') || dirs[i][0] != '.')
             {
                 list_dir(full, opts, ls);

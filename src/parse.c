@@ -60,7 +60,8 @@ static void sort_paths(t_ls *ls)
             else
                 // fichier
                 _files[b++] = ls->paths[i];
-        }else
+        }
+        else
             perror(ls->paths[i]);
     }
     ls->path_nb_dirs = (a);

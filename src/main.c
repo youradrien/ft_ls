@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 	{
 		int i = 0;
 		while (ls->paths[i]){
-			if(i == ls->path_nb_files)
+			if(i == ls->path_nb_files && ls->path_nb_files > 0)
 				printf("\n\n");
 			list_dir(ls->paths[i++], &ls->options, ls);
 		}
