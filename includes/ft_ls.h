@@ -29,6 +29,8 @@ typedef struct s_opts {
 typedef struct s_ls {
     char    **paths;
     int     path_len;
+    int     path_nb_files,
+            path_nb_dirs;
 
     // files/dirs
     char    **files;

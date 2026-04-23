@@ -118,7 +118,7 @@ static  int is_a_file(char *path)
     }
     if (!S_ISDIR(st.st_mode)) // fichier → pas opendir
     {
-        printf("%s\n", path);
+        printf("%s\t", path);
         return 1;
     }
     return 0;

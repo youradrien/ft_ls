@@ -37,8 +37,11 @@ int main(int argc, char **argv)
 	else
 	{
 		int i = 0;
-		while (ls->paths[i])
+		while (ls->paths[i]){
+			if(i == ls->path_nb_files)
+				printf("\n\n");
 			list_dir(ls->paths[i++], &ls->options, ls);
+		}
 	}
 	// test debug
     // printf("options: l=%d R=%d a=%d r=%d t=%d\n",

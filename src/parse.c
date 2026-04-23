@@ -63,6 +63,11 @@ static void sort_paths(t_ls *ls)
         }else
             perror(ls->paths[i]);
     }
+    ls->path_nb_dirs = (a);
+    ls->path_nb_files = (b);
+    if(!a || !b){
+        return ;
+    }
     _dirs[a] = NULL;
     _files[b] = NULL;
 
@@ -100,11 +105,6 @@ static void sort_paths(t_ls *ls)
             i++;
             a++;
         }
-    }
-    // printf("ls->paths\n");
-    for(int i = 0; i <= ls->path_len; i++)
-    {
-        // printf("- %s\n", ls->paths[i]);
     }
 }
 
