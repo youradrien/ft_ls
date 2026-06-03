@@ -99,10 +99,8 @@ static void sort_paths(t_ls *ls)
     {
         char * **z[2] = {&(_files), &(_dirs)};
         char **arr = *z[k];
-        // printf("%s: \n", k == 0 ? "files" : "dirs");
         int i = 0;
         while(arr[i]){
-            // printf("- %s\n", arr[i]);
             ls->paths[a] = arr[i];
             i++;
             a++;

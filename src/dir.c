@@ -179,7 +179,6 @@ void list_dir(char *path, t_opts *opts, t_ls *ls, int i, int first_recursiv__cal
         return;
     }
 
-
     entries = read_dir(path, &min_dirs, opts);
     if (!entries)
         return;
@@ -196,10 +195,11 @@ void list_dir(char *path, t_opts *opts, t_ls *ls, int i, int first_recursiv__cal
 
         
     print_files(entries, ls, path);
-    printf("\n");
-    
+    if(entries[0])
+        printf("\n");
+
     if((i != (ls->path_nb_dirs + ls->path_nb_files) && ls->path_nb_dirs > 1)
-        || (opts->R && first_recursiv__call == 0))
+        || (opts->R))
     {
         printf("\n");
     }
@@ -220,7 +220,6 @@ void list_dir(char *path, t_opts *opts, t_ls *ls, int i, int first_recursiv__cal
             {
                 // recursive call
                 list_dir(full, opts, ls, i, first_recursiv__call + 1);
-                printf("\n");
             }
             free(full);
             i++;
