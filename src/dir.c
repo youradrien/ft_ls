@@ -41,6 +41,7 @@ static void sort(char **entries, t_opts *opts, char *path)
 
 
 
+
 static char **read_dir(char *path, int *minimum_dirs, t_opts *opts)
 {
     DIR *dir;
@@ -81,6 +82,7 @@ static char **read_dir(char *path, int *minimum_dirs, t_opts *opts)
 
 
 
+
 static char **extract_dirs(char **entries, int minimum_dirs, char *path)
 {
     struct stat st;
@@ -108,7 +110,9 @@ static char **extract_dirs(char **entries, int minimum_dirs, char *path)
     return dirs;
 }
 
-static  int is_a_file(char *path)
+
+
+static  int is_a_file(char *path, t_ls *ls, int i)
 {
     struct stat st;
     if (stat(path, &st) == -1)
@@ -118,32 +122,89 @@ static  int is_a_file(char *path)
     }
     if (!S_ISDIR(st.st_mode)) // fichier → pas opendir
     {
-        printf("%s\t", path);
+        if(ls->options.l)
+            print_L(path, NULL);
+        else
+            printf("%s\t", path);
+        if(ls->path_nb_dirs > 0)
+        {
+            if(i == ls->path_nb_files)
+                printf("\n\n");
+        }
         return 1;
     }
     return 0;
 }
 
-void list_dir(char *path, t_opts *opts, t_ls *ls)
+
+
+
+static int is_a_symlink(char *path)
+{
+    struct stat st;
+
+    if (lstat(path, &st) == -1)
+        return 1;
+
+    printf("ezrzeorozro: '%s' \n", path);
+    printf("%s", path);
+    if (S_ISLNK(st.st_mode))
+    {
+        // symlink
+        char buf[PATH_MAX];
+        ssize_t len = readlink(path, buf, sizeof(buf) - 1);
+
+        if (len != -1)
+        {
+            buf[len] = '\0';
+            printf(" -> %s", buf);
+        }
+        printf("\n");
+        return 1;
+    }else
+        return 0;
+}
+
+
+
+
+
+void list_dir(char *path, t_opts *opts, t_ls *ls, int i, int first_recursiv__call)
 {
     char **entries;
     int min_dirs;
 
-    if(is_a_file(path))
+    // file
+    if(is_a_file(path, ls, i)){
         return;
+    }
+
+
     entries = read_dir(path, &min_dirs, opts);
     if (!entries)
         return;
     
     sort(entries, opts, path);
 
+    // directory
     char **dirs = extract_dirs(entries, min_dirs, path);
     if( (!opts->R && ls->path_len > 1)
-        || (opts->R))
+        || (opts->R && first_recursiv__call > 0))
+    {
         printf("%s: \n", path);
+    }
+
         
     print_files(entries, ls, path);
+    printf("\n");
+    
+    if((i != (ls->path_nb_dirs + ls->path_nb_files) && ls->path_nb_dirs > 1)
+        || (opts->R && first_recursiv__call == 0))
+    {
+        printf("\n");
+    }
 
+    // -R flag
     if (opts->R)
     {
         // for-each dir
@@ -157,7 +218,9 @@ void list_dir(char *path, t_opts *opts, t_ls *ls)
             char *full = ft_joinpath(path, dirs[i]);
             if( (opts->a && dirs[i][0] == '.') || dirs[i][0] != '.')
             {
-                list_dir(full, opts, ls);
+                // recursive call
+                list_dir(full, opts, ls, i, first_recursiv__call + 1);
+                printf("\n");
             }
             free(full);
             i++;

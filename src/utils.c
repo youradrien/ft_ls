@@ -61,6 +61,8 @@ char *ft_joinpath(char *path, char *name)
 {
     char *tmp;
     char *res;
+	if(!name)
+		return (ft_strjoin(path, ""));
 
     tmp = ft_strjoin(path, "/");
     res = ft_strjoin(tmp, name);

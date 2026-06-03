@@ -28,7 +28,7 @@ static void print_perms(mode_t mode)
 }
 
 
-static void print_L(char *path, char *name)
+void print_L(char *path, char *name)
 {
     struct stat st;
     char *full = ft_joinpath(path, name);
@@ -81,6 +81,5 @@ void print_files(char **entries, t_ls *ls, char *path)
             printf("%s\t", entries[i]);
         i++;
     }
-    printf("\n\n");
 }
 

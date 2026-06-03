@@ -24,9 +24,10 @@ static int parse_flags(char *arg, t_opts *opts)
         else if (arg[i] == 't') opts->t = 1;
         else
         {
-            write(1, "ft_ls: illegal flag option -- ", 30);
-            write(1, &arg[i], 1);
-            write(1, "\n", 1);
+            if(arg[i] == '-')
+                printf("ft_ls: unrecognized option `%s'\n", arg);
+            else
+                printf("ft_ls: invalid option -- %c\n", arg[i]);
             return (1);
         }
         i++;
@@ -122,10 +123,10 @@ int parse_args(int argc, char **argv, t_ls *ls)
         // case:"--"
         if (strcmp(argv[i], "--") == 0)
         {
-            i++;
-            while (i < argc)
-                ls->paths[c++] = argv[i++];
-            break;
+            // i++;
+            // while (i < argc)
+            //     ls->paths[c++] = argv[i++];
+            // break;
         }
         // flags
         else if (argv[i][0] == '-' && argv[i][1])

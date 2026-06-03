@@ -32,17 +32,20 @@ int main(int argc, char **argv)
 	}
 	if (!ls->paths || !ls->paths[0])
 	{
-		list_dir(".", &ls->options, ls);
+		list_dir(".", &ls->options, ls, 0, 0);
 	}
 	else
 	{
+		// printf("pathlen: %d \npath->nb_files: %d\npath->nb-dirs: %d \n", 
+		// 		ls->path_len, ls->path_nb_files, ls->path_nb_dirs
+		// );
 		int i = 0;
-		while (ls->paths[i]){
-			if(i == ls->path_nb_files && ls->path_nb_files > 0)
-				printf("\n\n");
-			list_dir(ls->paths[i++], &ls->options, ls);
+		while (ls->paths[i])
+		{
+			list_dir(ls->paths[i++], &ls->options, ls, i, 0);
 		}
 	}
+	free(ls);
 	// test debug
     // printf("options: l=%d R=%d a=%d r=%d t=%d\n",
     //     ls->options.l,
@@ -50,11 +53,5 @@ int main(int argc, char **argv)
     //     ls->options.a,
     //     ls->options.r,
     //     ls->options.t);
-	// int i = 0;
-    // while (ls->paths[i])
-    // {
-    //     printf("path: %s\n", ls->paths[i]);
-    //     i++;
-    // }
 	return (0);
 }

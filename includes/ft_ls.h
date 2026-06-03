@@ -40,16 +40,35 @@ typedef struct s_ls {
 
 // parse
 int parse_args(int argc, char **argv, t_ls *ls);
-void list_dir(char *path, t_opts *opts, t_ls *ls);
+void list_dir(char *path, t_opts *opts, t_ls *ls, int i, int first_recursiv__call);
 
 // utils
 int ft_strcmp(const char *s1, const char *s2);
 char    *ft_joinpath(char *path, char *name);
 char	*ft_strjoin(char const *s1, char const *s2);
-int cmp_alpha(char *a, char *b);
-int cmp_time(char *a, char *b, char *path);
+int     cmp_alpha(char *a, char *b);
+int     cmp_time(char *a, char *b, char *path);
+void    print_L(char *path, char *name);
+
 // print
 void print_files(char **entries, t_ls *ls, char *path);
 
+
+// tests
+/*
+- ls [+1pts] 
+- ls -a [+1pts] 
+- ls -l [+2pts]
+- ls -r [+1pts] 
+- ls -t [+1pts] 
+- ls -r with several files/folders/... as parameter. [+1pts] 
+- ls -t with several files/folders/... as parameter. [+1pts] 
+- setuid/setgid/stickybit [+1pts]
+- ls -R [+2pts]
+- ls -larRt ../ ./ src
+- ls ('-l -t' for en. as well as '-lt')
+- ls zzzz /usr/this_does_not_exist 
+- ls -a -a -a -a - a . ../ -R ../
+*/
 
 #endif
