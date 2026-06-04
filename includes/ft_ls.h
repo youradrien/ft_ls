@@ -70,6 +70,21 @@ void print_files(char **entries, t_ls *ls, char *path);
 - ls ('-l -t' for en. as well as '-lt')
 - ls zzzz /usr/this_does_not_exist 
 - ls -a -a -a -a - a . ../ -R ../
+- ls ---a -l
+- ls -aaa
+- ls -la 
+- ls -al 
+- ls -ltr
+- ls -lrt src includes Makefile
+- ls -Ra 
+
+// PERMISSION DENIED
+mkdir forbidden
+chmod 000 forbidden
+
+ls forbidden
+ls -l forbidden
+ls -R forbidden
 */
 
 #endif

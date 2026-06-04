@@ -48,7 +48,10 @@ static char **read_dir(char *path, int *minimum_dirs, t_opts *opts)
 
     dir = opendir(path);
     if (!dir)
+    {
+        printf("ft_ls: %s: Permission denied\n", path);
         return NULL;
+    }
 
     // 1. count
     struct dirent *entry;
