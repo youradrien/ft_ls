@@ -43,10 +43,11 @@ static void sort_paths(t_ls *ls)
     char **_files;
     char **_dirs;
     
-    _files = (char **)(malloc(sizeof(char *) * ls->path_len));
-    _dirs = (char **)(malloc(sizeof(char *) * ls->path_len));
-    if(!_files || !_dirs)
+    _files = (char **)(malloc(sizeof(char *) * (ls->path_len + 1) ));
+    _dirs = (char **)(malloc(sizeof(char *) * (ls->path_len + 1) ));
+    if(!_files || !_dirs){
         return ; 
+    }
     int a = 0, b = 0;
 
     // split files/dirs
@@ -67,9 +68,9 @@ static void sort_paths(t_ls *ls)
     }
     ls->path_nb_dirs = (a);
     ls->path_nb_files = (b);
-    if(!a || !b){
+    if(!a && !b){
         return ;
-    }
+    }    
     _dirs[a] = NULL;
     _files[b] = NULL;
 
@@ -82,6 +83,7 @@ static void sort_paths(t_ls *ls)
         {
             for (j = i + 1; arr[j]; j++)
             {
+        
                 int cmp = strcmp(arr[i], arr[j]);
                 if (ls->options.r)
                     cmp = -cmp;
@@ -91,6 +93,7 @@ static void sort_paths(t_ls *ls)
                     arr[i] = arr[j];
                     arr[j] = tmp;
                 }
+                
             }
         }
     }
