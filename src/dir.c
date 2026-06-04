@@ -97,12 +97,10 @@ static char **extract_dirs(char **entries, int minimum_dirs, char *path)
     if (!dirs)
         return NULL;
 
-    // 2. fill
     i = 0;
     while (entries[i])
     {
         char *a = ft_joinpath(path, entries[i]);
-        //printf("%s \n", a);
         if (stat(a, &st) == 0 && S_ISDIR(st.st_mode))
             dirs[j++] = entries[i];
         free(a);
@@ -149,14 +147,13 @@ static int is_a_symlink(char *path)
     if (lstat(path, &st) == -1)
         return 1;
 
-    printf("ezrzeorozro: '%s' \n", path);
-    printf("%s", path);
     if (S_ISLNK(st.st_mode))
     {
         // symlink
         char buf[PATH_MAX];
         ssize_t len = readlink(path, buf, sizeof(buf) - 1);
 
+        printf("%s", path);
         if (len != -1)
         {
             buf[len] = '\0';
@@ -177,6 +174,10 @@ void list_dir(char *path, t_opts *opts, t_ls *ls, int i, int first_recursiv__cal
     char **entries;
     int min_dirs;
 
+    // link
+    if(is_a_symlink(path)){
+        return ;
+    }
     // file
     if(is_a_file(path, ls, i)){
         return;
@@ -191,7 +192,7 @@ void list_dir(char *path, t_opts *opts, t_ls *ls, int i, int first_recursiv__cal
     // directory
     char **dirs = extract_dirs(entries, min_dirs, path);
     if( (!opts->R && ls->path_len > 1)
-        || (opts->R))
+        || (opts->R && first_recursiv__call > 0))
     {
         printf("%s: \n", path);
     }

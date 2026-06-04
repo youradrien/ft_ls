@@ -54,7 +54,8 @@ static void sort_paths(t_ls *ls)
     for (i = 0; ls->paths[i]; i++)
     {
         struct stat st;
-        if (stat(ls->paths[i], &st) == 0)
+        //if (stat(ls->paths[i], &st) == 0)
+        if (lstat(ls->paths[i], &st) == 0)
         {
             if (S_ISDIR(st.st_mode))
                 _dirs[a++] = ls->paths[i];

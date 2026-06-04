@@ -77,7 +77,7 @@ void print_files(char **entries, t_ls *ls, char *path);
 - ls -ltr
 - ls -lrt src includes Makefile
 - ls -Ra 
-
+- ls -Rr src src/aa 
 // PERMISSION DENIED
 mkdir forbidden
 chmod 000 forbidden
@@ -85,6 +85,19 @@ chmod 000 forbidden
 ls forbidden
 ls -l forbidden
 ls -R forbidden
+
+// SYMBOLIC LINK
+1. Basic symlink
+Create:
+touch file.txt
+ln -s file.txt link
+
+Test:
+ls -l link
+./ft_ls -l link
+
+Expected format:
+lrwxr-xr-x ... link -> file.txt
 */
 
 #endif

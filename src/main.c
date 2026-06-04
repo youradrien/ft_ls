@@ -36,13 +36,11 @@ int main(int argc, char **argv)
 	}
 	else
 	{
-		// printf("pathlen: %d \npath->nb_files: %d\npath->nb-dirs: %d \n", 
-		// 		ls->path_len, ls->path_nb_files, ls->path_nb_dirs
-		// );
 		int i = 0;
 		while (ls->paths[i])
 		{
-			list_dir(ls->paths[i++], &ls->options, ls, i, 0);
+			list_dir(ls->paths[i], &ls->options, ls, i + 1, 0);
+			i++;
 		}
 	}
 	free(ls);
