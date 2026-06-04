@@ -76,6 +76,21 @@ int cmp_alpha(char *a, char *b)
     return ft_strcmp(a, b);
 }
 
+int cmp_time_dir(char *dir_1, char *dir_2)
+{
+    struct stat st1, st2;
+
+    stat(dir_1, &st1);
+    stat(dir_2, &st2);
+
+
+    if (st1.st_mtime == st2.st_mtime)
+        return ft_strcmp(dir_1, dir_2);
+
+    return (st2.st_mtime - st1.st_mtime);
+}
+
+
 int cmp_time(char *a, char *b, char *path)
 {
     struct stat st1, st2;

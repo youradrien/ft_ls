@@ -83,8 +83,12 @@ static void sort_paths(t_ls *ls)
         {
             for (j = i + 1; arr[j]; j++)
             {
-        
-                int cmp = strcmp(arr[i], arr[j]);
+                int cmp;
+                if(ls->options.t)
+                    cmp = cmp_time_dir(arr[i], arr[j]);
+                else
+                    cmp = strcmp(arr[i], arr[j]);
+                
                 if (ls->options.r)
                     cmp = -cmp;
                 if (cmp > 0)

@@ -49,6 +49,7 @@ char	*ft_strjoin(char const *s1, char const *s2);
 int     cmp_alpha(char *a, char *b);
 int     cmp_time(char *a, char *b, char *path);
 void    print_L(char *path, char *name);
+int cmp_time_dir(char *dir_1, char *dir_2);
 
 // print
 void print_files(char **entries, t_ls *ls, char *path);
