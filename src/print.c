@@ -107,7 +107,26 @@ void print_L(char *path, char *name)
 void print_files(char **entries, t_ls *ls, char *path)
 {
     int i = 0;
-    
+    int total_blocks = 0;
+    if(ls->options.l)
+    {
+        struct stat st;
+        while (entries && entries[i])
+        {
+            char *full = ft_joinpath(path, entries[i]);
+            if (lstat(full, &st) == -1 || (entries[i][0] == '.' && !ls->options.a))
+            {
+                free(full);
+                i++;
+                continue;
+            }
+            total_blocks += st.st_blocks;
+            free(full);
+            i++;
+        }
+        printf("total %d\n", total_blocks);
+    }
+    i = 0;
     while (entries && entries[i])
     {
         if (entries[i][0] == '.' && 
