@@ -98,6 +98,26 @@ ls -l link
 
 Expected format:
 lrwxr-xr-x ... link -> file.txt
+
+
+// UID/GID/STICKYBIT
+
+- setuid
+touch test
+chmod 4755 test
+ls -l test
+attendu -> -rwsr-xr-x
+
+- setgid
+chmod 2755 test
+attendu -> -rwxr-sr-x
+
+- sticky bit
+mkdir dir
+chmod 1777 dir
+attendu -> [drwxrwxrwt]
+
+
 */
 
 #endif
