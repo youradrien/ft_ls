@@ -199,13 +199,11 @@ void list_dir(char *path, t_opts *opts, t_ls *ls, int i, int first_recursiv__cal
 
         
     print_files(entries, ls, path);
-    if(entries[0])
-        printf("\n");
-
+    
     if((i != (ls->path_nb_dirs + ls->path_nb_files) && ls->path_nb_dirs > 1)
         || (opts->R))
     {
-        printf("\n");
+        printf(entries[0] ? "\n\n" : "\n");
     }
 
     // -R flag

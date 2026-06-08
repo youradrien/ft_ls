@@ -69,6 +69,29 @@ static void print_perms(mode_t mode)
         printf("%c", (mode & S_IXOTH) ? 'x' : '-');
 }
 
+static void print_acl_xattr(char *path)
+{
+    acl_t acl;
+    ssize_t xattr;
+
+    xattr = listxattr(path, NULL, 0, 0);
+
+    if (xattr > 0)
+    {
+        printf("@");
+        return;
+    }
+
+    acl = acl_get_file(path, ACL_TYPE_EXTENDED);
+    if (acl)
+    {
+        acl_free(acl);
+        printf("+");
+        return;
+    }
+
+    printf(" ");
+}
 
 void print_L(char *path, char *name)
 {
@@ -85,6 +108,9 @@ void print_L(char *path, char *name)
     printf("%c", file_type(st.st_mode));
     // perms
     print_perms(st.st_mode);
+    // ACL/xattr
+    print_acl_xattr(full);
+   
     // links
     printf(" %lu", (unsigned long)st.st_nlink);
 

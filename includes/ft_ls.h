@@ -14,6 +14,9 @@
 #include <stdlib.h>
 #include <pwd.h>
 #include <grp.h>
+#include <sys/xattr.h>
+#include <sys/types.h>
+#include <sys/acl.h>
 
 // ls -options flags
 typedef struct s_opts {
@@ -78,6 +81,9 @@ void print_files(char **entries, t_ls *ls, char *path);
 - ls -lrt src includes Makefile
 - ls -Ra 
 - ls -Rr src src/aa 
+
+
+// -------------------
 // PERMISSION DENIED
 mkdir forbidden
 chmod 000 forbidden
@@ -85,7 +91,11 @@ chmod 000 forbidden
 ls forbidden
 ls -l forbidden
 ls -R forbidden
+// -------------------
 
+
+
+// -------------------
 // SYMBOLIC LINK
 1. Basic symlink
 Create:
@@ -98,10 +108,12 @@ ls -l link
 
 Expected format:
 lrwxr-xr-x ... link -> file.txt
+// -------------------
 
 
+
+// -------------------
 // UID/GID/STICKYBIT
-
 - setuid
 touch test
 chmod 4755 test
@@ -116,8 +128,26 @@ attendu -> -rwxr-sr-x
 mkdir dir
 chmod 1777 dir
 attendu -> [drwxrwxrwt]
+// -------------------
+
+
+// -------------------
+// ACL/Attribute
+
+ATTRIBUTE
+touch testfile
+xattr -w test.attr hello testfile
+ls -l testfile -> -rw-r--r--@
+xattr testfile
+
+ACL
+touch aclfile
+chmod +a "everyone deny delete" aclfile
+ls -l aclfile -> -rw-r--r--+
+ls -le aclfile
+// -------------------
+
 
 
 */
-
 #endif
