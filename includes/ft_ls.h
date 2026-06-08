@@ -17,6 +17,7 @@
 #include <sys/xattr.h>
 #include <sys/types.h>
 #include <sys/acl.h>
+#include <time.h>
 
 // ls -options flags
 typedef struct s_opts {

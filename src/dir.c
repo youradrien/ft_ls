@@ -192,7 +192,7 @@ void list_dir(char *path, t_opts *opts, t_ls *ls, int i, int first_recursiv__cal
     // directory
     char **dirs = extract_dirs(entries, min_dirs, path);
     if( (!opts->R && ls->path_len > 1)
-        || (opts->R && first_recursiv__call > 0))
+        || (opts->R))
     {
         printf("%s: \n", path);
     }

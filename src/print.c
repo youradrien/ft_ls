@@ -93,6 +93,27 @@ static void print_acl_xattr(char *path)
     printf(" ");
 }
 
+static void print_l_total(char **entries, t_ls *ls, char *path)
+{
+    int total_blocks = 0, i = 0;
+    struct stat st;
+    while (entries && entries[i])
+    {
+        char *full = ft_joinpath(path, entries[i]);
+        if (lstat(full, &st) == -1 || (entries[i][0] == '.' && !ls->options.a))
+        {
+            free(full);
+            i++;
+            continue;
+        }
+        total_blocks += st.st_blocks;
+        free(full);
+        i++;
+    }
+    printf("total %d\n", total_blocks);
+}
+
+
 void print_L(char *path, char *name)
 {
     struct stat st;
@@ -103,7 +124,7 @@ void print_L(char *path, char *name)
         free(full);
         return;
     }
-    //printf("%s vs %s \n", path, name);
+
     // type
     printf("%c", file_type(st.st_mode));
     // perms
@@ -133,26 +154,11 @@ void print_L(char *path, char *name)
 void print_files(char **entries, t_ls *ls, char *path)
 {
     int i = 0;
-    int total_blocks = 0;
     if(ls->options.l)
     {
-        struct stat st;
-        while (entries && entries[i])
-        {
-            char *full = ft_joinpath(path, entries[i]);
-            if (lstat(full, &st) == -1 || (entries[i][0] == '.' && !ls->options.a))
-            {
-                free(full);
-                i++;
-                continue;
-            }
-            total_blocks += st.st_blocks;
-            free(full);
-            i++;
-        }
-        printf("total %d\n", total_blocks);
+        print_l_total(entries, ls, path);
     }
-    i = 0;
+
     while (entries && entries[i])
     {
         if (entries[i][0] == '.' && 
