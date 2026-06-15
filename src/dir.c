@@ -140,7 +140,7 @@ static  int is_a_file(char *path, t_ls *ls, int i)
 
 
 
-static int is_a_symlink(char *path, t_ls *ls)
+int is_a_symlink(char *path, t_ls *ls)
 {
     struct stat st;
 

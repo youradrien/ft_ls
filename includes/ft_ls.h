@@ -56,7 +56,8 @@ int     cmp_time(char *a, char *b, char *path);
 int cmp_time_dir(char *dir_1, char *dir_2);
 int get_term_width(void);
 
-
+//symlink
+int is_a_symlink(char *path, t_ls *ls);
 
 // print
 void print_files(char **entries, t_ls *ls, char *path);
