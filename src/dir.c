@@ -145,7 +145,7 @@ int is_a_symlink(char *path, t_ls *ls)
     struct stat st;
 
     if (lstat(path, &st) == -1)
-        return 1;
+        return 0;
 
     if (S_ISLNK(st.st_mode))
     {

@@ -128,9 +128,11 @@ void print_files(char **entries, t_ls *ls, char *path)
 
             if(is_a_symlink(entries[i], ls))
             {
-            }else{
-                print_L(path, entries[i], 0);
+                i++;
+                continue;
             }
+            print_L(path, entries[i], 0);
+            
         
             i++;
         }
