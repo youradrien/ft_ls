@@ -24,6 +24,7 @@ SRCS = $(addprefix $(SRC_DIR)/, \
 	parse.c \
 	print.c \
 	dir.c \
+	print_L.c\
 )
 OBJS = $(SRCS:.c=.o)
 

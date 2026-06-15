@@ -12,167 +12,136 @@
 
 #include "ft_ls.h"
 
-// static void print_perms(mode_t mode)
-// {
-//     printf("%c", (mode & S_IRUSR) ? 'r' : '-');
-//     printf("%c", (mode & S_IWUSR) ? 'w' : '-');
-//     printf("%c", (mode & S_IXUSR) ? 'x' : '-');
-
-//     printf("%c", (mode & S_IRGRP) ? 'r' : '-');
-//     printf("%c", (mode & S_IWGRP) ? 'w' : '-');
-//     printf("%c", (mode & S_IXGRP) ? 'x' : '-');
-
-//     printf("%c", (mode & S_IROTH) ? 'r' : '-');
-//     printf("%c", (mode & S_IWOTH) ? 'w' : '-');
-//     printf("%c", (mode & S_IXOTH) ? 'x' : '-');
-// }
-
-static char file_type(mode_t mode)
+static int max_name_len(char **entries, t_ls *ls)
 {
-    if (S_ISREG(mode)) return '-';
-    if (S_ISDIR(mode)) return 'd';
-    if (S_ISLNK(mode)) return 'l';
-    if (S_ISCHR(mode)) return 'c';
-    if (S_ISBLK(mode)) return 'b';
-    if (S_ISFIFO(mode)) return 'p';
-    if (S_ISSOCK(mode)) return 's';
-    return '?';
-}
+    int i = 0, max = 0, len;
 
-static void print_perms(mode_t mode)
-{
-    // USER
-    printf("%c", (mode & S_IRUSR) ? 'r' : '-');
-    printf("%c", (mode & S_IWUSR) ? 'w' : '-');
-
-    if (mode & S_ISUID)
-        printf("%c", (mode & S_IXUSR) ? 's' : 'S');
-    else
-        printf("%c", (mode & S_IXUSR) ? 'x' : '-');
-
-    // GROUP
-    printf("%c", (mode & S_IRGRP) ? 'r' : '-');
-    printf("%c", (mode & S_IWGRP) ? 'w' : '-');
-
-    if (mode & S_ISGID)
-        printf("%c", (mode & S_IXGRP) ? 's' : 'S');
-    else
-        printf("%c", (mode & S_IXGRP) ? 'x' : '-');
-
-    // OTHER
-    printf("%c", (mode & S_IROTH) ? 'r' : '-');
-    printf("%c", (mode & S_IWOTH) ? 'w' : '-');
-
-    if (mode & S_ISVTX)
-        printf("%c", (mode & S_IXOTH) ? 't' : 'T');
-    else
-        printf("%c", (mode & S_IXOTH) ? 'x' : '-');
-}
-
-static void print_acl_xattr(char *path)
-{
-    acl_t acl;
-    ssize_t xattr;
-
-    xattr = listxattr(path, NULL, 0, 0);
-
-    if (xattr > 0)
-    {
-        printf("@");
-        return;
-    }
-
-    acl = acl_get_file(path, ACL_TYPE_EXTENDED);
-    if (acl)
-    {
-        acl_free(acl);
-        printf("+");
-        return;
-    }
-
-    printf(" ");
-}
-
-static void print_l_total(char **entries, t_ls *ls, char *path)
-{
-    int total_blocks = 0, i = 0;
-    struct stat st;
     while (entries && entries[i])
     {
-        char *full = ft_joinpath(path, entries[i]);
-        if (lstat(full, &st) == -1 || (entries[i][0] == '.' && !ls->options.a))
+        if (entries[i][0] == '.' && !ls->options.a)
         {
-            free(full);
             i++;
             continue;
         }
-        total_blocks += st.st_blocks;
-        free(full);
+        len = strlen(entries[i]);
+        if (len > max)
+            max = len;
         i++;
     }
-    printf("total %d\n", total_blocks);
+    return (max);
 }
 
 
-void print_L(char *path, char *name)
+static int visible_count(char **entries, t_ls *ls)
 {
-    struct stat st;
-    char *full = ft_joinpath(path, name);
-
-    if (lstat(full, &st) == -1)
+    int i = 0, count = 0;
+    while (entries && entries[i])
     {
-        free(full);
-        return;
+        if (!(entries[i][0] == '.' && !ls->options.a))
+            count++;
+        i++;
+    }
+    return (count);
+}
+
+
+
+static char **visible_entries(char **entries, t_ls *ls)
+{
+    int i, j, count;
+    char **tab;
+
+    count = visible_count(entries, ls);
+    tab = malloc(sizeof(char *) * (count + 1));
+    if (!tab)
+        return (NULL);
+
+    i = 0, j = 0;
+    while (entries && entries[i])
+    {
+        if (!(entries[i][0] == '.' && !ls->options.a))
+            tab[j++] = entries[i];
+        i++;
+    }
+    tab[j] = NULL;
+    return (tab);
+}
+
+
+
+static void print_columns(char **entries, t_ls *ls)
+{
+    char **tab;
+    int width, cols, rows, count;
+
+    tab = visible_entries(entries, ls);
+    if (!tab)
+        return ;
+
+    count = visible_count(entries, ls);
+    width = max_name_len(tab, ls) + 2;
+
+    cols = get_term_width() / width;
+    if (cols < 1)
+        cols = 1;
+
+    rows = (count + cols - 1) / cols;
+
+    // printf("rows: %d\t cols: %d\n", rows, cols);
+    int n = 0; while(entries[n]) n++;
+    int r = 0;
+    while (r < rows)
+    {
+        int c = 0;
+        while (c < cols)
+        {
+            int idx = r + c * rows;
+            if (idx < count)
+                printf("%-*s", width, tab[idx]);
+
+            c++;
+        }
+        printf("\n");
+        r++;
     }
 
-    // type
-    printf("%c", file_type(st.st_mode));
-    // perms
-    print_perms(st.st_mode);
-    // ACL/xattr
-    print_acl_xattr(full);
-   
-    // links
-    printf(" %lu", (unsigned long)st.st_nlink);
-
-    // owner / group
-    struct passwd *pw = getpwuid(st.st_uid);
-    struct group *gr = getgrgid(st.st_gid);
-    printf(" %s %s", pw->pw_name, gr->gr_name);
-    // size
-    printf(" %lld", (long long)st.st_size);
-    // time
-    char *t = ctime(&st.st_mtime);
-    printf(" %.12s", t + 4);
-    // name
-    printf(" %s\n", (name != NULL) ? name : path);
-
-    free(full);
+    free(tab);
 }
 
 
+// [main print entry]
 void print_files(char **entries, t_ls *ls, char *path)
 {
     int i = 0;
+
     if(ls->options.l)
     {
         print_l_total(entries, ls, path);
+        while (entries && entries[i])
+        {
+            if (entries[i][0] == '.' && 
+                !ls->options.a)
+            {
+                // fichier caché
+                i++;
+                continue;
+            }
+
+            print_L(path, entries[i]);
+            i++;
+        }
+        printf("\n");
+    }else
+    {
+        // printf("entries: \n");
+        //    while (entries && entries[i])
+        // {
+        //     printf("%s ", entries [i]);
+        //     i++;
+        // }
+        // printf("\n");
+        print_columns(entries, ls);
     }
 
-    while (entries && entries[i])
-    {
-        if (entries[i][0] == '.' && 
-            !ls->options.a)
-        {
-            // fichier caché
-            i++;
-            continue;
-        }
-        if (ls->options.l)
-            print_L(path, entries[i]);
-        else
-            printf("%s\t", entries[i]);
-        i++;
-    }
 }
 

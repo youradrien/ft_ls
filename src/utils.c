@@ -108,3 +108,13 @@ int cmp_time(char *a, char *b, char *path)
 
     return (st2.st_mtime - st1.st_mtime);
 }
+
+
+int get_term_width(void)
+{
+    struct winsize ws;
+
+    if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws) == -1)
+        return (80);
+    return (ws.ws_col);
+}
