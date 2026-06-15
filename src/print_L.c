@@ -98,10 +98,14 @@ void print_l_total(char **entries, t_ls *ls, char *path)
     printf("total %d\n", total_blocks);
 }
 
-void print_L(char *path, char *name)
+void print_L(char *path, char *name, int is_linkk)
 {
     struct stat st;
-    char *full = ft_joinpath(path, name);
+    char *full;
+    if(!is_linkk)
+        full = (ft_joinpath(path, name));
+    else
+        full = strdup(path);
 
     if (lstat(full, &st) == -1)
     {
@@ -129,7 +133,8 @@ void print_L(char *path, char *name)
     char *t = ctime(&st.st_mtime);
     printf(" %.12s", t + 4);
     // name
-    printf(" %s\n", (name != NULL) ? name : path);
+    if(!is_linkk)
+        printf(" %s\n", (name != NULL) ? name : path);
 
     free(full);
 }

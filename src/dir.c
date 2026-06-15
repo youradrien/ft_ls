@@ -124,7 +124,7 @@ static  int is_a_file(char *path, t_ls *ls, int i)
     if (!S_ISDIR(st.st_mode)) // fichier → pas opendir
     {
         if(ls->options.l)
-            print_L(path, NULL);
+            print_L(path, NULL, 0);
         else
             printf("%s\t", path);
         if(ls->path_nb_dirs > 0)
@@ -140,7 +140,7 @@ static  int is_a_file(char *path, t_ls *ls, int i)
 
 
 
-static int is_a_symlink(char *path)
+static int is_a_symlink(char *path, t_ls *ls)
 {
     struct stat st;
 
@@ -149,11 +149,15 @@ static int is_a_symlink(char *path)
 
     if (S_ISLNK(st.st_mode))
     {
+        // printf("path: %s \n", path);
+        if(ls->options.l){
+            print_L(path, "", 1);
+        }
         // symlink
         char buf[PATH_MAX];
         ssize_t len = readlink(path, buf, sizeof(buf) - 1);
 
-        printf("%s", path);
+        printf(" %s", path);
         if (len != -1)
         {
             buf[len] = '\0';
@@ -175,7 +179,7 @@ void list_dir(char *path, t_opts *opts, t_ls *ls, int i, int first_recursiv__cal
     int min_dirs;
 
     // link
-    if(is_a_symlink(path)){
+    if(is_a_symlink(path, ls)){
         return ;
     }
     // file

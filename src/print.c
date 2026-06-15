@@ -88,7 +88,6 @@ static void print_columns(char **entries, t_ls *ls)
     rows = (count + cols - 1) / cols;
 
     // printf("rows: %d\t cols: %d\n", rows, cols);
-    int n = 0; while(entries[n]) n++;
     int r = 0;
     while (r < rows)
     {
@@ -127,19 +126,12 @@ void print_files(char **entries, t_ls *ls, char *path)
                 continue;
             }
 
-            print_L(path, entries[i]);
+            print_L(path, entries[i], 0);
             i++;
         }
         printf("\n");
     }else
     {
-        // printf("entries: \n");
-        //    while (entries && entries[i])
-        // {
-        //     printf("%s ", entries [i]);
-        //     i++;
-        // }
-        // printf("\n");
         print_columns(entries, ls);
     }
 
